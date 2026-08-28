@@ -3,12 +3,15 @@ import { execFile, spawn } from 'node:child_process';
 import { mkdtemp } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
 const directory = await mkdtemp(join(tmpdir(), 'kill-tree-cli-'));
 const stateFile = join(directory, 'pids');
-const fixture = new URL('./fixtures/process-tree.mjs', import.meta.url).pathname;
+const fixture = fileURLToPath(
+  new URL('./fixtures/process-tree.mjs', import.meta.url),
+);
 const child = spawn(process.execPath, [fixture, stateFile, '1', '2', 'stubborn'], {
   stdio: 'ignore',
 });

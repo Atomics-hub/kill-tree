@@ -3,6 +3,7 @@ import { execFile } from 'node:child_process';
 import { mkdtemp, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
@@ -79,7 +80,7 @@ void kill.terminateTree(123).then((report) => report.failures);
 await execFileAsync(
   process.execPath,
   [
-    new URL('../node_modules/typescript/bin/tsc', import.meta.url).pathname,
+    fileURLToPath(new URL('../node_modules/typescript/bin/tsc', import.meta.url)),
     '--noEmit',
     '--strict',
     '--target',
@@ -89,7 +90,7 @@ await execFileAsync(
     '--moduleResolution',
     'NodeNext',
     '--typeRoots',
-    new URL('../node_modules/@types', import.meta.url).pathname,
+    fileURLToPath(new URL('../node_modules/@types', import.meta.url)),
     'esm.ts',
     'commonjs.cts',
   ],

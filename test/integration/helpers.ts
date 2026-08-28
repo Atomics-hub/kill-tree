@@ -1,6 +1,7 @@
 import { spawn, type ChildProcess } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import { setTimeout as delay } from 'node:timers/promises';
+import { fileURLToPath } from 'node:url';
 
 export interface SpawnedTree {
   child: ChildProcess;
@@ -47,7 +48,7 @@ export async function spawnTree(
   const child = spawn(
     process.execPath,
     [
-      new URL('../fixtures/process-tree.mjs', import.meta.url).pathname,
+      fileURLToPath(new URL('../fixtures/process-tree.mjs', import.meta.url)),
       stateFile,
       String(depth),
       String(breadth),

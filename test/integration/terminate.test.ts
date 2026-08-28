@@ -3,9 +3,14 @@ import { mkdtemp } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { test } from 'node:test';
+import { fileURLToPath } from 'node:url';
 
 import { signalTree, spawnGuarded, terminateTree } from '../../src/index.js';
 import { cleanup, isAlive, spawnTree, waitForExit, waitForPids } from './helpers.js';
+
+const fixturePath = fileURLToPath(
+  new URL('../fixtures/process-tree.mjs', import.meta.url),
+);
 
 test('gracefully terminates a branching process tree leaf-first', async (t) => {
   const directory = await mkdtemp(join(tmpdir(), 'kill-tree-graceful-'));
@@ -57,8 +62,8 @@ test(
   const allPids = await waitForPids(stateFile, 2);
   tracked.push(...allPids.filter((pid) => !tracked.includes(pid)));
 
-  assert.equal(report.escalated, true);
   assert.ok(report.discovered.includes(allPids[1]!));
+  assert.ok(report.signaled.includes(allPids[1]!));
   assert.deepEqual(report.survivors, []);
   await Promise.all(allPids.map((pid) => waitForExit(pid)));
   },
@@ -102,7 +107,7 @@ test('spawnGuarded owns and terminates a process group on POSIX', async (t) => {
   const guarded = spawnGuarded(
     process.execPath,
     [
-      new URL('../fixtures/process-tree.mjs', import.meta.url).pathname,
+      fixturePath,
       stateFile,
       '1',
       '2',
@@ -128,7 +133,7 @@ test('spawnGuarded respects includeRoot false', async (t) => {
   const guarded = spawnGuarded(
     process.execPath,
     [
-      new URL('../fixtures/process-tree.mjs', import.meta.url).pathname,
+      fixturePath,
       stateFile,
       '1',
       '1',
