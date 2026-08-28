@@ -1,12 +1,15 @@
 import assert from 'node:assert/strict';
 import { execFile, spawn } from 'node:child_process';
-import { mkdtemp } from 'node:fs/promises';
+import { mkdtemp, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
+const packageVersion = JSON.parse(
+  await readFile(new URL('../package.json', import.meta.url), 'utf8'),
+).version;
 const directory = await mkdtemp(join(tmpdir(), 'kill-tree-cli-'));
 const stateFile = join(directory, 'pids');
 const fixture = fileURLToPath(
@@ -22,7 +25,6 @@ try {
   const deadline = Date.now() + 10_000;
   while (Date.now() < deadline) {
     try {
-      const { readFile } = await import('node:fs/promises');
       const lines = (await readFile(stateFile, 'utf8')).trim().split('\n');
       if (lines.length >= 3) {
         pids.push(...lines.map((line) => JSON.parse(line).pid));
@@ -48,7 +50,7 @@ try {
     cwd: new URL('..', import.meta.url),
     encoding: 'utf8',
   });
-  assert.match(version.stdout, /^0\.1\.0\s*$/);
+  assert.equal(version.stdout.trim(), packageVersion);
   console.log('CLI smoke test passed');
 } finally {
   for (const pid of pids.reverse()) {

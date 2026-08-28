@@ -4,6 +4,13 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-08-27
+
+### Fixed
+
+- Resolve npm bin symlinks before detecting the CLI entrypoint, so `npx @a5omic/kill-tree` and installed `kill-tree` commands execute correctly.
+- Remove platform-path and startup races from cross-platform process fixtures.
+
 ## [0.1.0] - 2026-08-27
 
 ### Added

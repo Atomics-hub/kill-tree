@@ -97,9 +97,14 @@ await execFileAsync(
   { cwd: consumer, encoding: 'utf8' },
 );
 const version = await execFileAsync(
-  process.execPath,
-  ['node_modules/@a5omic/kill-tree/dist/cli.js', '--version'],
+  join(
+    consumer,
+    'node_modules',
+    '.bin',
+    process.platform === 'win32' ? 'kill-tree.cmd' : 'kill-tree',
+  ),
+  ['--version'],
   { cwd: consumer, encoding: 'utf8' },
 );
-assert.equal(version.stdout.trim(), '0.1.0');
+assert.equal(version.stdout.trim(), manifest.version);
 console.log('packed ESM, CJS, types, and CLI smoke tests passed');
