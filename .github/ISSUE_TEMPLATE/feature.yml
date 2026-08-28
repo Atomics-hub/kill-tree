@@ -1,0 +1,24 @@
+name: Feature request
+description: Propose a process-management capability or portability improvement
+title: "[feature] "
+labels: [enhancement]
+body:
+  - type: textarea
+    attributes:
+      label: Problem
+      description: Describe the concrete workflow that is not handled today.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Proposed contract
+      description: Explain the API and the guarantee boundary it should advertise.
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Platforms
+      multiple: true
+      options: [Linux, macOS, Windows, Other POSIX]
+    validations:
+      required: true

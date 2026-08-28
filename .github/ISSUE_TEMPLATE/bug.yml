@@ -1,0 +1,31 @@
+name: Bug report
+description: Report incorrect termination, a survivor, or a platform failure
+title: "[bug] "
+labels: [bug]
+body:
+  - type: textarea
+    attributes:
+      label: Reproduction
+      description: Provide the smallest process topology and runnable reproduction.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Operating system
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Node.js and kill-tree versions
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Termination report
+      description: Remove secrets, then include the full structured report when available.
+  - type: checkboxes
+    attributes:
+      label: Process cleanup
+      options:
+        - label: I have terminated any fixture processes left by my reproduction.
+          required: true

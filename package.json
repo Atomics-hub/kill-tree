@@ -1,0 +1,103 @@
+{
+  "name": "kill-tree",
+  "version": "0.1.0",
+  "description": "Reliable cross-platform process-tree termination for Node.js, with graceful escalation, structured reports, and a tree-kill compatible API.",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "kill-tree": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean --sourcemap --splitting false && node scripts/build-cjs-shim.mjs && tsup src/cli.ts --format esm --sourcemap --splitting false",
+    "check": "tsc --noEmit",
+    "test": "tsx --test test/unit/*.test.ts",
+    "test:coverage": "c8 tsx --test --test-concurrency=1 test/unit/*.test.ts test/integration/*.test.ts",
+    "test:integration": "tsx --test --test-concurrency=1 test/integration/*.test.ts",
+    "test:stress": "KILL_TREE_STRESS_RUNS=20 tsx --test --test-concurrency=1 test/integration/stress.test.ts",
+    "test:cli": "node test/cli-smoke.mjs",
+    "test:package": "node test/package-smoke.mjs",
+    "verify": "npm run check && npm run test:coverage && npm run build && npm run test:integration && npm run test:cli && npm run test:package && npm pack --dry-run",
+    "prepublishOnly": "npm run verify",
+    "release:check": "node scripts/check-release.mjs"
+  },
+  "keywords": [
+    "process",
+    "process-tree",
+    "tree-kill",
+    "kill",
+    "signal",
+    "child-process",
+    "subprocess",
+    "orphan-process",
+    "cross-platform",
+    "cli"
+  ],
+  "author": "Atomics Hub",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Atomics-hub/kill-tree.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Atomics-hub/kill-tree/issues"
+  },
+  "homepage": "https://github.com/Atomics-hub/kill-tree#readme",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "c8": {
+    "all": true,
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "src/cli.ts",
+      "src/types.ts"
+    ],
+    "check-coverage": true,
+    "lines": 80,
+    "statements": 80,
+    "functions": 80,
+    "branches": 70,
+    "reporter": [
+      "text"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "c8": "^10.1.3",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.8.0"
+  },
+  "overrides": {
+    "esbuild": "^0.28.2"
+  }
+}
