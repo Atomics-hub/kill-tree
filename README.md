@@ -1,13 +1,13 @@
 # kill-tree
 
-[![npm version](https://img.shields.io/npm/v/kill-tree.svg)](https://www.npmjs.com/package/kill-tree)
+[![npm version](https://img.shields.io/npm/v/%40a5omic%2Fkill-tree.svg)](https://www.npmjs.com/package/@a5omic/kill-tree)
 [![CI](https://github.com/Atomics-hub/kill-tree/actions/workflows/ci.yml/badge.svg)](https://github.com/Atomics-hub/kill-tree/actions/workflows/ci.yml)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Terminate a process tree without pretending one signal is enough.
 
 ```ts
-import { terminateTree } from 'kill-tree';
+import { terminateTree } from '@a5omic/kill-tree';
 
 const report = await terminateTree(server.pid!, {
   gracePeriodMs: 2_000,
@@ -23,7 +23,7 @@ if (report.survivors.length) {
 ## Install
 
 ```sh
-npm install kill-tree
+npm install @a5omic/kill-tree
 ```
 
 - Zero runtime dependencies
@@ -38,7 +38,7 @@ npm install kill-tree
 Use an npm alias:
 
 ```sh
-npm install tree-kill@npm:kill-tree
+npm install tree-kill@npm:@a5omic/kill-tree
 ```
 
 The default export keeps the familiar callback API, including numeric-string PIDs:
@@ -109,7 +109,7 @@ PID 1 is rejected unless `allowPid1: true` is explicit.
 Take one tree snapshot and send one signal, leaves first:
 
 ```ts
-import { signalTree } from 'kill-tree';
+import { signalTree } from '@a5omic/kill-tree';
 
 const report = await signalTree(pid, { signal: 'SIGINT' });
 ```
@@ -121,7 +121,7 @@ Use this for compatibility or non-termination signals. For reliable shutdown, pr
 The strongest cleanup starts when you create the child:
 
 ```ts
-import { spawnGuarded } from 'kill-tree';
+import { spawnGuarded } from '@a5omic/kill-tree';
 
 const worker = spawnGuarded('node', ['worker.js'], {
   stdio: 'inherit',
@@ -137,8 +137,8 @@ On POSIX, owned children start in a separate process group and final cleanup tar
 ## CLI
 
 ```sh
-npx kill-tree <pid> [signal]
-npx kill-tree 4321 --force-after 2000 --json
+npx @a5omic/kill-tree <pid> [signal]
+npx @a5omic/kill-tree 4321 --force-after 2000 --json
 ```
 
 Options:

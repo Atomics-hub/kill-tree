@@ -44,7 +44,11 @@ await execFileAsync(
 
 const esm = await execFileAsync(
   process.execPath,
-  ['--input-type=module', '--eval', "import api from 'kill-tree'; console.log(typeof api)"],
+  [
+    '--input-type=module',
+    '--eval',
+    "import api from '@a5omic/kill-tree'; console.log(typeof api)",
+  ],
   { cwd: consumer, encoding: 'utf8' },
 );
 assert.equal(esm.stdout.trim(), 'function');
@@ -53,21 +57,21 @@ const cjs = await execFileAsync(
   [
     '--input-type=commonjs',
     '--eval',
-    "const kill = require('kill-tree'); console.log(typeof kill, typeof kill.terminateTree)",
+    "const kill = require('@a5omic/kill-tree'); console.log(typeof kill, typeof kill.terminateTree)",
   ],
   { cwd: consumer, encoding: 'utf8' },
 );
 assert.equal(cjs.stdout.trim(), 'function function');
 await writeFile(
   join(consumer, 'esm.ts'),
-  `import kill, { terminateTree } from 'kill-tree';
+  `import kill, { terminateTree } from '@a5omic/kill-tree';
 kill(123, 'SIGTERM', (error) => void error);
 void terminateTree(123).then((report) => report.survivors);
 `,
 );
 await writeFile(
   join(consumer, 'commonjs.cts'),
-  `import kill = require('kill-tree');
+  `import kill = require('@a5omic/kill-tree');
 kill('123', (error) => void error);
 void kill.terminateTree(123).then((report) => report.failures);
 `,
@@ -93,7 +97,7 @@ await execFileAsync(
 );
 const version = await execFileAsync(
   process.execPath,
-  ['node_modules/kill-tree/dist/cli.js', '--version'],
+  ['node_modules/@a5omic/kill-tree/dist/cli.js', '--version'],
   { cwd: consumer, encoding: 'utf8' },
 );
 assert.equal(version.stdout.trim(), '0.1.0');

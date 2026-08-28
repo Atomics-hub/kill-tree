@@ -1,5 +1,5 @@
 {
-  "name": "kill-tree",
+  "name": "@a5omic/kill-tree",
   "version": "0.1.0",
   "description": "Reliable cross-platform process-tree termination for Node.js, with graceful escalation, structured reports, and a tree-kill compatible API.",
   "type": "module",
@@ -21,7 +21,7 @@
     "./package.json": "./package.json"
   },
   "bin": {
-    "kill-tree": "./dist/cli.js"
+    "kill-tree": "dist/cli.js"
   },
   "files": [
     "dist",
